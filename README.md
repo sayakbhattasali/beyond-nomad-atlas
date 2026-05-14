@@ -194,4 +194,4 @@ GitHub:
 
 ---
 
-# ✨ Beyond campus. Beyond routine. Be
+# ✨ Beyond campus. Beyond routine. Beyond Nomad.
