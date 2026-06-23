@@ -5,6 +5,9 @@ import { ArrowLeft, Clock, IndianRupee, MapPin, Navigation, Sparkles, Utensils }
 import { destinations, getDestination } from "@/data/destinations";
 import DestinationComments from "@/components/DestinationComments";
 import SaveDestinationButton from "@/components/SaveDestinationButton";
+import VisitDestinationButton from "@/components/VisitDestinationButton";
+import MemoryButton from "@/components/MemoryButton";
+import PosterButton from "@/components/poster/PosterButton";
 
 export function generateStaticParams() {
   return destinations.map((destination) => ({ slug: destination.slug }));
@@ -32,8 +35,10 @@ export default async function DestinationDetailsPage({ params }: PageProps) {
           <p className="mb-4 text-xs font-semibold uppercase tracking-[.38em] text-ember">{destination.category}</p>
           <h1 className="max-w-full break-words text-4xl font-semibold leading-tight tracking-tight text-white sm:text-5xl md:text-7xl">{destination.name}</h1>
           <p className="mt-6 max-w-3xl text-lg leading-8 text-white/68">{destination.overview}</p>
-          <div className="mt-6">
+          <div className="mt-6 flex flex-wrap items-center gap-3">
             <SaveDestinationButton destinationSlug={destination.slug} />
+            <VisitDestinationButton destinationSlug={destination.slug} />
+            <MemoryButton destinationSlug={destination.slug} destinationName={destination.name} />
           </div>
 
           <div className="mt-10 grid gap-4 md:grid-cols-3">
@@ -45,8 +50,14 @@ export default async function DestinationDetailsPage({ params }: PageProps) {
       </section>
 
       <section className="px-6 py-20">
-        <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[.8fr_1.2fr]">
-          <aside className="glass h-fit rounded-[2rem] p-6 lg:sticky lg:top-28">
+        <div className="mx-auto flex flex-col gap-8 lg:grid lg:max-w-7xl lg:grid-cols-[.8fr_1.2fr]">
+          {/* Save Memory - Mobile Order 1, Desktop Right Col Row 1 */}
+          <div className="order-1 lg:col-start-2 lg:row-start-1">
+            <PosterButton destination={destination} />
+          </div>
+
+          {/* Sidebar - Mobile Order 2, Desktop Left Col */}
+          <aside className="glass h-fit order-2 rounded-[2rem] p-6 lg:sticky lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:top-28">
             <p className="mb-3 text-xs font-semibold uppercase tracking-[.32em] text-ember">Best time</p>
             <p className="text-xl font-semibold">{destination.bestTime}</p>
 
@@ -73,7 +84,8 @@ export default async function DestinationDetailsPage({ params }: PageProps) {
             </div>
           </aside>
 
-          <div className="space-y-8">
+          {/* Main Content - Mobile Order 3, Desktop Right Col Row 2 */}
+          <div className="order-3 space-y-8 lg:col-start-2 lg:row-start-2">
             <Panel icon={Navigation} title="Suggested Itinerary">
               <div className="space-y-4">
                 {destination.itinerary.map((step, index) => (

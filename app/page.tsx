@@ -43,7 +43,7 @@ export default function HomePage() {
       >
         <div className="mx-auto max-w-7xl">
           <SectionHeader
-            eyebrow="Signature Atlas"
+            eyebrow="Signature Collection"
             title="Curated Explorations"
             description="Our hand-picked routes for the weekend nomad."
             action={
@@ -71,7 +71,7 @@ export default function HomePage() {
           <div className="mt-10 grid gap-4 md:grid-cols-3">
             {[
               { icon: WalletCards, title: "Economic Path", text: "Journeys framed around realistic, mindful spending." },
-              { icon: Map, title: "Atlas First", text: "Each destination includes atmospheric paths and travel feel." },
+              { icon: Map, title: "Explore More", text: "Each destination is hand-picked for its atmospheric travel feel." },
               { icon: CloudRain, title: "Vibe Driven", text: "Atmospheric walks, hidden resets, food trails, peaceful breaks." }
             ].map((item) => (
               <div key={item.title} className="glass rounded-[2rem] p-6">

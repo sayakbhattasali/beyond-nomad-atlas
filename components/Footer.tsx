@@ -11,12 +11,12 @@ export default function Footer() {
               <Compass size={20} />
             </span>
             <div>
-              <p className="font-bold tracking-[.25em] uppercase text-white">BEYOND NOMAD <span className="text-ember font-medium tracking-[.4em] text-[10px] ml-1">Atlas</span></p>
-              <p className="text-sm text-white/48">Uncovering Odisha's Hidden Atlas.</p>
+              <p className="font-bold tracking-[.25em] uppercase text-white">BEYOND NOMAD <span className="text-[0.85em] text-ember">Atlas</span></p>
+               <p className="text-sm text-white/48">Uncovering Odisha's Hidden Gems.</p>
             </div>
           </div>
           <p className="max-w-md text-sm leading-6 text-white/55">
-            A curated cinematic atlas for modern explorers and weekend nomads — built for quick escapes,
+            A curated cinematic discovery platform for modern explorers and weekend nomads — built for quick escapes,
             atmospheric journeys, and timeless weekend memories.
           </p>
         </div>

@@ -1,6 +1,6 @@
 # BEYOND NOMAD Atlas
 
-A curated cinematic travel atlas and exploration ecosystem for modern nomads and weekend explorers in Odisha.
+A curated cinematic travel discovery platform for modern nomads and weekend explorers in Odisha.
 
 ## Identity
 
@@ -18,7 +18,7 @@ A curated cinematic travel atlas and exploration ecosystem for modern nomads and
 ## Features
 
 - **Atmospheric Discovery**: Cinematic responsive interface built for immersion.
-- **Atlas Core**: A curated library of destinations with real-world travel feel.
+- **Destination Hub**: A curated library of destinations with real-world travel feel.
 - **Saved Trips**: A personal Curated Vault for saving atmospheric journeys.
 - **Explorer Desk**: A private nomadic dashboard with real-time community stats.
 - **Vibe-Driven Planning**: Filter escapes by mood, budget, and time resonance.
@@ -40,8 +40,8 @@ http://localhost:3000
 ## System Structure
 
 - `/` — Landing & Mood Selection
-- `/destinations` — Atlas Core / Exploration Hub
-- `/saved` — Curated Vault / Bookmarked Atlas
+- `/destinations` — Exploration Hub
+- `/saved` — Curated Vault / Bookmarked Journeys
 - `/account` — Explorer Desk
 - `/planner` — Atmospheric Journey Planner
 - `/about` — The Vision

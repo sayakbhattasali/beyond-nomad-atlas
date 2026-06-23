@@ -11,6 +11,7 @@ import AuthButton from "./AuthButton";
 const links = [
   { href: "/", label: "Home" },
   { href: "/destinations", label: "Destinations" },
+  { href: "/companion", label: "Companion" },
   { href: "/planner", label: "Planner" },
   { href: "/about", label: "About" }
 ];
@@ -28,7 +29,6 @@ export default function Navbar() {
           </span>
           <span className="leading-tight">
             <span className="block text-sm font-bold tracking-[0.3em] text-white uppercase">BEYOND NOMAD</span>
-            <span className="block text-[10px] uppercase tracking-[0.4em] text-ember font-medium">Atlas</span>
           </span>
         </Link>
 

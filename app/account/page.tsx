@@ -5,14 +5,24 @@ import { auth, db } from "@/lib/firebase";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { collection, query, where, getCountFromServer, getDocs, orderBy, limit, Timestamp } from "firebase/firestore";
 import Link from "next/link";
-import { User as UserIcon, Bookmark, MessageSquare } from "lucide-react";
+import { User as UserIcon, Bookmark, MessageSquare, MapPinCheck, Book } from "lucide-react";
+import Image from "next/image";
 import { destinations } from "@/data/destinations";
-import DestinationCard from "@/components/DestinationCard";
 
 type RecentComment = {
     id: string;
     text: string;
     destinationSlug: string;
+    createdAt?: Timestamp;
+};
+
+type RecentMemory = {
+    id: string;
+    title: string;
+    text: string;
+    mood: string;
+    destinationName: string;
+    memoryDate?: Timestamp;
     createdAt?: Timestamp;
 };
 
@@ -54,8 +64,12 @@ export default function AccountPage() {
     const [loading, setLoading] = useState(true);
     const [savedCount, setSavedCount] = useState<number>(0);
     const [commentsCount, setCommentsCount] = useState<number>(0);
+    const [visitedCount, setVisitedCount] = useState<number>(0);
+    const [memoryCount, setMemoryCount] = useState<number>(0);
     const [savedSlugs, setSavedSlugs] = useState<string[]>([]);
+    const [visitedSlugs, setVisitedSlugs] = useState<string[]>([]);
     const [recentComments, setRecentComments] = useState<RecentComment[]>([]);
+    const [recentMemories, setRecentMemories] = useState<RecentMemory[]>([]);
 
     useEffect(() => {
         const unsub = onAuthStateChanged(auth, async (currentUser) => {
@@ -74,6 +88,38 @@ export default function AccountPage() {
                     const savedDocs = await getDocs(savedQ);
                     setSavedSlugs(
                         savedDocs.docs.map((doc) => doc.data().destinationSlug as string)
+                    );
+
+                    // Fetch visited destinations count and slugs
+                    const visitedQ = query(
+                        collection(db, "visitedDestinations"),
+                        where("userId", "==", currentUser.uid),
+                        orderBy("createdAt", "desc")
+                    );
+                    const visitedSnapshot = await getCountFromServer(visitedQ);
+                    setVisitedCount(visitedSnapshot.data().count);
+                    const visitedDocs = await getDocs(visitedQ);
+                    setVisitedSlugs(
+                        visitedDocs.docs.map((doc) => doc.data().destinationSlug as string)
+                    );
+
+                    // Fetch memories count and recent entries
+                    const memoriesQ = query(collection(db, "memories"), where("userId", "==", currentUser.uid), orderBy("memoryDate", "desc"));
+                    const memoriesSnapshot = await getCountFromServer(memoriesQ);
+                    setMemoryCount(memoriesSnapshot.data().count);
+
+                    const recentMemoriesQ = query(
+                        collection(db, "memories"),
+                        where("userId", "==", currentUser.uid),
+                        orderBy("memoryDate", "desc"),
+                        limit(2)
+                    );
+                    const recentMemSnapshot = await getDocs(recentMemoriesQ);
+                    setRecentMemories(
+                        recentMemSnapshot.docs.map(doc => ({
+                            id: doc.id,
+                            ...doc.data()
+                        } as RecentMemory))
                     );
 
                     // Fetch comments count and recent activity
@@ -106,6 +152,13 @@ export default function AccountPage() {
     }, []);
 
     const savedPreview = savedSlugs
+        .map((slug) =>
+            destinations.find((destination) => destination.slug === slug)
+        )
+        .filter((destination): destination is typeof destinations[number] => Boolean(destination))
+        .slice(0, 2);
+
+    const visitedPreview = visitedSlugs
         .map((slug) =>
             destinations.find((destination) => destination.slug === slug)
         )
@@ -178,21 +231,37 @@ export default function AccountPage() {
                                 Modern Nomad
                             </p>
 
-                            <div className="mt-8 grid w-full grid-cols-2 gap-3">
+                            <div className="mt-8 grid w-full grid-cols-2 gap-3 sm:grid-cols-4">
 
                                 <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition hover:bg-white/5">
-                                    <p className="text-2xl font-semibold text-white">{savedCount}</p>
+                                    <p className="text-xl font-semibold text-white">{savedCount}</p>
 
-                                    <p className="mt-1 text-xs uppercase tracking-[0.18em] text-white/35 flex items-center justify-center gap-1.5">
-                                        <Bookmark size={12} className="text-ember" /> Saved
+                                    <p className="mt-1 text-[10px] uppercase tracking-[0.12em] text-white/35 flex items-center justify-center gap-1">
+                                        <Bookmark size={10} className="text-ember" /> Saved
                                     </p>
                                 </div>
 
                                 <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition hover:bg-white/5">
-                                    <p className="text-2xl font-semibold text-white">{commentsCount}</p>
+                                    <p className="text-xl font-semibold text-white">{visitedCount}</p>
 
-                                    <p className="mt-1 text-xs uppercase tracking-[0.18em] text-white/35 flex items-center justify-center gap-1.5">
-                                        <MessageSquare size={12} className="text-ember" /> Notes
+                                    <p className="mt-1 text-[10px] uppercase tracking-[0.12em] text-white/35 flex items-center justify-center gap-1">
+                                        <MapPinCheck size={10} className="text-ember" /> Visited
+                                    </p>
+                                </div>
+
+                                <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition hover:bg-white/5">
+                                    <p className="text-xl font-semibold text-white">{memoryCount}</p>
+
+                                    <p className="mt-1 text-[10px] uppercase tracking-[0.12em] text-white/35 flex items-center justify-center gap-1">
+                                        <Book size={10} className="text-ember" /> Journal
+                                    </p>
+                                </div>
+
+                                <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition hover:bg-white/5">
+                                    <p className="text-xl font-semibold text-white">{commentsCount}</p>
+
+                                    <p className="mt-1 text-[10px] uppercase tracking-[0.12em] text-white/35 flex items-center justify-center gap-1">
+                                        <MessageSquare size={10} className="text-ember" /> Notes
                                     </p>
                                 </div>
 
@@ -219,11 +288,32 @@ export default function AccountPage() {
                             </div>
 
                             {savedPreview.length > 0 ? (
-                                <div className="mt-8 grid gap-6 sm:grid-cols-2">
-                                    {savedPreview.map((destination, index) => (
-                                        <div key={destination.slug} className="md:scale-95 md:origin-top-left md:-mb-10 md:-mr-10">
-                                            <DestinationCard destination={destination} index={index} />
-                                        </div>
+                                <div className="mt-8 grid gap-4 sm:grid-cols-2">
+                                    {savedPreview.map((destination) => (
+                                        <Link 
+                                            key={destination.slug} 
+                                            href={`/destinations/${destination.slug}`}
+                                            className="group flex items-center gap-4 rounded-2xl border border-white/5 bg-white/[0.02] p-3 transition hover:bg-white/5 hover:border-white/10"
+                                        >
+                                            <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border border-white/10">
+                                                <Image 
+                                                    src={destination.image} 
+                                                    fill 
+                                                    className="object-cover transition group-hover:scale-110" 
+                                                    alt={destination.name} 
+                                                />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <h4 className="text-sm font-semibold text-white group-hover:text-ember transition truncate">
+                                                    {destination.name}
+                                                </h4>
+                                                <div className="flex items-center gap-2 mt-1">
+                                                    <span className="text-[10px] text-white/40 uppercase tracking-wider">{destination.category}</span>
+                                                    <span className="h-0.5 w-0.5 rounded-full bg-white/20" />
+                                                    <span className="text-[10px] text-white/40 uppercase tracking-wider truncate">{destination.distance}</span>
+                                                </div>
+                                            </div>
+                                        </Link>
                                     ))}
                                 </div>
                             ) : (
@@ -238,6 +328,116 @@ export default function AccountPage() {
                                 </Link>
                             </div>
 
+                        </div>
+
+                        {/* VISITED PLACES */}
+                        <div className="rounded-[2rem] border border-white/10 bg-white/[0.03] p-8 backdrop-blur-2xl">
+
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <p className="text-xs uppercase tracking-[0.24em] text-ember">
+                                        Travel Memory Archive
+                                    </p>
+
+                                    <h3 className="mt-2 text-3xl font-semibold text-white">
+                                        Visited Places
+                                    </h3>
+                                </div>
+                            </div>
+
+                            {visitedPreview.length > 0 ? (
+                                <div className="mt-8 grid gap-4 sm:grid-cols-2">
+                                    {visitedPreview.map((destination) => (
+                                        <Link 
+                                            key={destination.slug} 
+                                            href={`/destinations/${destination.slug}`}
+                                            className="group flex items-center gap-4 rounded-2xl border border-white/5 bg-white/[0.02] p-3 transition hover:bg-white/5 hover:border-white/10"
+                                        >
+                                            <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border border-white/10">
+                                                <Image 
+                                                    src={destination.image} 
+                                                    fill 
+                                                    className="object-cover transition group-hover:scale-110" 
+                                                    alt={destination.name} 
+                                                />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <h4 className="text-sm font-semibold text-white group-hover:text-ember transition truncate">
+                                                    {destination.name}
+                                                </h4>
+                                                <div className="flex items-center gap-2 mt-1">
+                                                    <span className="text-[10px] text-white/40 uppercase tracking-wider">{destination.category}</span>
+                                                    <span className="h-0.5 w-0.5 rounded-full bg-white/20" />
+                                                    <span className="text-[10px] text-white/40 uppercase tracking-wider truncate">{destination.duration}</span>
+                                                </div>
+                                            </div>
+                                        </Link>
+                                    ))}
+                                </div>
+                            ) : (
+                                <p className="mt-6 text-white/45">
+                                    Destinations you have explored will appear here as travel memories.
+                                </p>
+                            )}
+
+                            <div className="mt-12">
+                                <Link href="/visited" className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-6 py-3 font-semibold text-white transition hover:bg-white/10 hover:border-white/20">
+                                    View visited places
+                                </Link>
+                            </div>
+
+                        </div>
+
+                        {/* TRAVEL MEMORIES */}
+                        <div className="rounded-[2rem] border border-white/10 bg-white/[0.03] p-8 backdrop-blur-2xl">
+
+                            <p className="text-xs uppercase tracking-[0.24em] text-ember">
+                                Personal Archive
+                            </p>
+
+                            <h3 className="mt-2 text-3xl font-semibold text-white">
+                                Travel Journal
+                            </h3>
+
+                            {recentMemories.length > 0 ? (
+                                <div className="mt-8 space-y-4">
+                                    {recentMemories.map((memory) => (
+                                        <div 
+                                            key={memory.id}
+                                            className="rounded-[1.5rem] border border-white/5 bg-white/[0.02] p-6"
+                                        >
+                                            <div className="flex items-start justify-between gap-4">
+                                                <div className="flex-1">
+                                                    <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-ember/70">
+                                                        {memory.destinationName} • {memory.mood}
+                                                    </p>
+                                                    <h4 className="mt-2 text-lg font-semibold text-white">
+                                                        {memory.title}
+                                                    </h4>
+                                                    <div className="mt-3 border-l border-ember/20 pl-4 py-1">
+                                                        <p className="text-sm leading-6 text-white/60 line-clamp-2 italic">
+                                                            {memory.text}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <p className="text-[10px] text-white/25 whitespace-nowrap pt-1">
+                                                    {getTimeAgo(memory.memoryDate || memory.createdAt)}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <p className="mt-6 text-white/45 mb-8">
+                                    Your personal travel reflections and journals will appear here.
+                                </p>
+                            )}
+
+                            <div className="mt-10">
+                                <Link href="/memories" className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-6 py-3 font-semibold text-white transition hover:bg-white/10 hover:border-white/20">
+                                    Open full journal
+                                </Link>
+                            </div>
                         </div>
 
                         {/* RECENT DISCUSSIONS */}

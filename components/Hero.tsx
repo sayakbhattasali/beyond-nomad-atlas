@@ -131,7 +131,7 @@ export default function Hero() {
     // Pick random recommendation
     const randomDest = destinations[Math.floor(Math.random() * destinations.length)];
     // Randomly pick 4 steps or first 4
-    const steps = [...randomDest.itinerary].sort(() => 0.5 - Math.random()).slice(0, 4);
+    const steps = randomDest.itinerary.slice(0, 4);
     
     const subtitles = [
       "Based on tonight's mood",

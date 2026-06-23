@@ -5,7 +5,7 @@ import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "BEYOND NOMAD Atlas",
-  description: "A curated cinematic atlas for modern explorers and weekend nomads in Odisha."
+  description: "Beyond Nomad Atlas — a curated cinematic discovery platform for modern explorers and weekend nomads in Odisha."
 };
 
 export default function RootLayout({

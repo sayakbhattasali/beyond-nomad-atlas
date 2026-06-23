@@ -25,8 +25,8 @@ export default async function DestinationsPage({
       <MotionSection initial="hidden" animate="show" variants={stagger} className="mx-auto max-w-7xl">
         <div className="pb-12 pt-12">
           <SectionHeader
-            eyebrow="Atlas Core"
-            title="Exploration Hub"
+            eyebrow="Destination Hub"
+            title="Explore Odisha"
             description="Browse atmospheric journeys across Bhubaneswar, Odisha's hidden outskirts, and timeless coastal escapes."
           />
         </div>
