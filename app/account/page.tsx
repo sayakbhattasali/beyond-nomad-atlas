@@ -221,6 +221,7 @@ export default function AccountPage() {
                                 src={user.photoURL || "https://placehold.co/120x120"}
                                 alt={user.displayName || "Profile"}
                                 className="h-28 w-28 rounded-full object-cover ring-2 ring-white/10"
+                                referrerPolicy="no-referrer"
                             />
 
                             <h2 className="mt-5 text-2xl font-semibold text-white">

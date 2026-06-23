@@ -150,6 +150,7 @@ export default function AuthButton({ className }: AuthButtonProps) {
             src={user.photoURL || ""}
             alt={user.displayName || "User"}
             className="h-8 w-8 rounded-full object-cover"
+            referrerPolicy="no-referrer"
           />
 
           <div className="hidden flex-col items-start leading-none md:flex">

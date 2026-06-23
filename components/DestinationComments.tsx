@@ -146,6 +146,7 @@ export default function DestinationComments({ destinationSlug }: { destinationSl
                                         src={comment.userPhoto}
                                         alt={comment.userName}
                                         className="h-8 w-8 rounded-full object-cover"
+                                        referrerPolicy="no-referrer"
                                     />
                                 )}
                                 <div>
