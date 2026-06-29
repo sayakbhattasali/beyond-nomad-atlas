@@ -5,7 +5,9 @@ node_modules/
 
 # Next.js
 .next/
+.next_production/
 out/
+
 
 # Production build
 build/

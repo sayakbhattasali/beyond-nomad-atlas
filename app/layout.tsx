@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import WeatherProvider from "@/components/WeatherProvider";
+import { CinemaTransitionProvider } from "@/components/CinemaTransitionContext";
+import CinemaTransition from "@/components/CinemaTransition";
 
 export const metadata: Metadata = {
   title: "BEYOND NOMAD Atlas",
@@ -16,9 +19,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="noise">
-        <Navbar />
-        {children}
-        <Footer />
+        <CinemaTransitionProvider>
+          <WeatherProvider>
+            <Navbar />
+            {children}
+            <Footer />
+          </WeatherProvider>
+          <CinemaTransition />
+        </CinemaTransitionProvider>
       </body>
     </html>
   );

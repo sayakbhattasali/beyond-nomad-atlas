@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Compass, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import AuthButton from "./AuthButton";
+import Image from "next/image";
 
 const links = [
   { href: "/", label: "Home" },
@@ -23,12 +24,19 @@ export default function Navbar() {
   return (
     <header className="fixed left-0 right-0 top-0 z-50 px-4 py-4 sm:px-6">
       <nav className="mx-auto flex max-w-7xl items-center justify-between rounded-full border border-white/10 bg-black/35 px-4 py-3 shadow-glass backdrop-blur-2xl sm:px-6">
-        <Link href="/" className="flex items-center gap-3">
-          <span className="grid h-10 w-10 place-items-center rounded-full bg-ember/15 text-ember ring-1 ring-ember/30">
-            <Compass size={20} />
+        <Link href="/" className="flex items-center gap-2 sm:gap-3 shrink-0 min-w-0">
+          <span className="relative flex h-8 w-8 sm:h-10 sm:w-10 shrink-0 overflow-hidden rounded-full ring-1 ring-white/20">
+            <Image
+              src="/logo.png"
+              alt="Beyond Nomad Atlas Logo"
+              fill
+              sizes="(max-width: 640px) 32px, 40px"
+              priority
+              className="object-cover scale-[1.4]"
+            />
           </span>
-          <span className="leading-tight">
-            <span className="block text-sm font-bold tracking-[0.3em] text-white uppercase">BEYOND NOMAD</span>
+          <span className="leading-tight min-w-0">
+            <span className="block text-[11px] sm:text-sm font-bold tracking-[0.2em] sm:tracking-[0.3em] text-white uppercase truncate">BEYOND NOMAD</span>
           </span>
         </Link>
 

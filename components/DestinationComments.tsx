@@ -149,18 +149,18 @@ export default function DestinationComments({ destinationSlug }: { destinationSl
                                         referrerPolicy="no-referrer"
                                     />
                                 )}
-                                <div>
-                                    <p className="text-sm font-semibold text-white">
+                                <div className="min-w-0">
+                                    <p className="text-sm font-semibold text-white truncate">
                                         {comment.userName.split(" ")[0]}
                                     </p>
 
-                                    <p className="text-xs text-white/35">
+                                    <p className="text-xs text-white/35 truncate">
                                         {getTimeAgo(comment.createdAt)}
                                     </p>
                                 </div>
                             </div>
 
-                            <p className="text-sm leading-6 text-white/68">{comment.text}</p>
+                            <p className="text-sm leading-6 text-white/68 break-words">{comment.text}</p>
                         </div>
                     ))
                 )}

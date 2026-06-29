@@ -8,6 +8,7 @@ import SaveDestinationButton from "@/components/SaveDestinationButton";
 import VisitDestinationButton from "@/components/VisitDestinationButton";
 import MemoryButton from "@/components/MemoryButton";
 import PosterButton from "@/components/poster/PosterButton";
+import CinemaEntrance from "@/components/CinemaEntrance";
 
 export function generateStaticParams() {
   return destinations.map((destination) => ({ slug: destination.slug }));
@@ -24,28 +25,30 @@ export default async function DestinationDetailsPage({ params }: PageProps) {
   if (!destination) notFound();
 
   return (
-    <main>
+    <main style={{ '--glow-color': 'transparent' } as React.CSSProperties}>
       <section className="relative min-h-[78vh] overflow-hidden px-6 pb-16 pt-32">
         <Image src={destination.image} alt={destination.name} fill className="object-cover opacity-35" priority />
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-ink/75 to-ink" />
         <div className="relative z-10 mx-auto max-w-7xl">
-          <Link href="/destinations" className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-4 py-2 text-sm text-white/70 backdrop-blur-xl hover:bg-white/10">
-            <ArrowLeft size={16} /> Back to destinations
-          </Link>
-          <p className="mb-4 text-xs font-semibold uppercase tracking-[.38em] text-ember">{destination.category}</p>
-          <h1 className="max-w-full break-words text-4xl font-semibold leading-tight tracking-tight text-white sm:text-5xl md:text-7xl">{destination.name}</h1>
-          <p className="mt-6 max-w-3xl text-lg leading-8 text-white/68">{destination.overview}</p>
-          <div className="mt-6 flex flex-wrap items-center gap-3">
-            <SaveDestinationButton destinationSlug={destination.slug} />
-            <VisitDestinationButton destinationSlug={destination.slug} />
-            <MemoryButton destinationSlug={destination.slug} destinationName={destination.name} />
-          </div>
+          <CinemaEntrance>
+            <Link href="/destinations" className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-4 py-2 text-sm text-white/70 backdrop-blur-xl hover:bg-white/10">
+              <ArrowLeft size={16} /> Back to destinations
+            </Link>
+            <p className="mb-4 text-xs font-semibold uppercase tracking-[.38em] text-ember">{destination.category}</p>
+            <h1 className="max-w-full break-words text-4xl font-semibold leading-tight tracking-tight text-white sm:text-5xl md:text-7xl">{destination.name}</h1>
+            <p className="mt-6 max-w-3xl text-lg leading-8 text-white/68">{destination.overview}</p>
+            <div className="mt-6 flex flex-wrap items-center gap-3">
+              <SaveDestinationButton destinationSlug={destination.slug} />
+              <VisitDestinationButton destinationSlug={destination.slug} />
+              <MemoryButton destinationSlug={destination.slug} destinationName={destination.name} />
+            </div>
 
-          <div className="mt-10 grid gap-4 md:grid-cols-3">
-            <Info icon={MapPin} label="Distance" value={destination.distance} />
-            <Info icon={IndianRupee} label="Budget Per Person" value={destination.budgetLabel} />
-            <Info icon={Clock} label="Duration" value={destination.duration} />
-          </div>
+            <div className="mt-10 grid gap-4 md:grid-cols-3">
+              <Info icon={MapPin} label="Distance" value={destination.distance} />
+              <Info icon={IndianRupee} label="Budget Per Person" value={destination.budgetLabel} />
+              <Info icon={Clock} label="Duration" value={destination.duration} />
+            </div>
+          </CinemaEntrance>
         </div>
       </section>
 

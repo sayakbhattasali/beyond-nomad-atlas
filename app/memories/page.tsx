@@ -121,7 +121,7 @@ export default function MemoriesPage() {
     }
 
     return (
-        <main className="page-shell px-6 pb-24">
+        <main className="page-shell px-6 pb-24" style={{ '--glow-color': 'transparent' } as React.CSSProperties}>
             <MotionSection initial="hidden" animate="show" variants={stagger} className="mx-auto max-w-5xl">
                 <div className="pb-12 pt-12">
                     <SectionHeader
@@ -132,68 +132,106 @@ export default function MemoriesPage() {
                 </div>
 
                 {memories.length > 0 ? (
-                    <div className="space-y-12 relative before:absolute before:left-8 before:top-2 before:bottom-2 before:w-px before:bg-white/10 md:before:left-1/2">
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-y-14 items-start relative pb-12">
                         {memories.map((memory, index) => {
                             const Icon = moodIcons[memory.mood] || Book;
-                            const isEven = index % 2 === 0;
+                            
+                            // Non-symmetric layout configurations for a digital investigation board
+                            const layoutConfigs = [
+                                {
+                                    colSpan: "md:col-span-7",
+                                    rotation: "rotate-[-1deg]",
+                                    paperClass: "hazy-lined border-l-2 border-ember/30 pl-6", // glowing margin line
+                                    cardPadding: "p-8 pt-10",
+                                    cardBg: "",
+                                    tapeLeft: "15%",
+                                    tapeRotation: "-rotate-3"
+                                },
+                                {
+                                    colSpan: "md:col-span-5 md:translate-y-6",
+                                    rotation: "rotate-[1.5deg]",
+                                    paperClass: "hazy-dotted",
+                                    cardPadding: "p-6 pb-12 pt-8", // Polaroid bottom margin spacing
+                                    cardBg: "",
+                                    tapeLeft: "60%",
+                                    tapeRotation: "rotate-4"
+                                },
+                                {
+                                    colSpan: "md:col-span-5 md:-translate-y-4",
+                                    rotation: "rotate-[-2deg]",
+                                    paperClass: "hazy-grid",
+                                    cardPadding: "p-7 pt-9",
+                                    cardBg: "",
+                                    tapeLeft: "25%",
+                                    tapeRotation: "-rotate-[-2deg]"
+                                },
+                                {
+                                    colSpan: "md:col-span-7 md:translate-y-4",
+                                    rotation: "rotate-[0.5deg]",
+                                    paperClass: "hazy-lined border-l-2 border-ember/30 pl-6",
+                                    cardPadding: "p-8 pt-10",
+                                    cardBg: "",
+                                    tapeLeft: "75%",
+                                    tapeRotation: "rotate-2"
+                                }
+                            ];
+
+                            const layout = layoutConfigs[index % layoutConfigs.length];
 
                             return (
                                 <MotionDiv
                                     key={memory.id}
                                     variants={{
-                                        hidden: { opacity: 0, y: 20 },
+                                        hidden: { opacity: 0, y: 30 },
                                         show: { opacity: 1, y: 0 }
                                     }}
-                                    className={`relative flex flex-col md:flex-row items-start md:items-center gap-8 ${isEven ? 'md:flex-row-reverse' : ''}`}
+                                    className={`relative w-full ${layout.colSpan} ${layout.rotation} transition duration-500 hover:scale-[1.01]`}
                                 >
-                                    {/* Timeline Dot */}
-                                    <div className="absolute left-8 md:left-1/2 -translate-x-1/2 z-10">
-                                        <div className="h-4 w-4 rounded-full bg-ember shadow-[0_0_15px_rgba(255,138,61,0.5)] ring-4 ring-black" />
-                                    </div>
+                                    {/* Sleek Frosted Glass Tape Element */}
+                                    <div 
+                                        className={`absolute -top-3.5 w-16 h-6 bg-white/15 border-x border-y border-white/20 backdrop-blur-md shadow-[0_2px_10px_rgba(0,0,0,0.5)] opacity-80 pointer-events-none z-20 ${layout.tapeRotation}`}
+                                        style={{ left: layout.tapeLeft }}
+                                    />
 
-                                    {/* Content Card */}
-                                    <div className={`w-full md:w-[calc(50%-2rem)] pl-16 md:pl-0 ${isEven ? 'md:text-right' : 'md:text-left'}`}>
-                                        <div className="glass group relative rounded-[2rem] border border-white/10 bg-white/[0.03] p-8 transition hover:bg-white/[0.06] hover:border-white/20">
-                                            <div className={`flex items-center gap-3 mb-4 ${isEven ? 'md:flex-row-reverse' : ''}`}>
-                                                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-ember/80">
-                                                    {formatDate(memory.memoryDate || memory.createdAt)}
-                                                </span>
-                                                <span className="h-1 w-1 rounded-full bg-white/20" />
-                                                <div className={`flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] uppercase tracking-wider text-white/60`}>
-                                                    <Icon size={10} className="text-ember" />
-                                                    {memory.mood}
-                                                </div>
-                                            </div>
-
-                                            <div className="flex items-start justify-between gap-4">
-                                                <Link href={`/destinations/${memory.destinationSlug}`} className="group/link block flex-1">
-                                                    <h3 className="text-xl font-semibold text-white group-hover/link:text-ember transition">
-                                                        {memory.title}
-                                                    </h3>
-                                                    <p className="mt-1 text-sm text-white/40 mb-5">
-                                                        at {memory.destinationName}
-                                                    </p>
-                                                </Link>
-                                                
-                                                <button 
-                                                    onClick={() => deleteMemory(memory.id)}
-                                                    className="opacity-0 group-hover:opacity-100 p-2 rounded-full hover:bg-white/5 text-white/20 hover:text-ember transition"
-                                                >
-                                                    <Trash2 size={16} />
-                                                </button>
-                                            </div>
-
-                                            <div className={`relative px-4 py-2 ${isEven ? 'text-right' : 'text-left'}`}>
-                                                <Quote size={20} className={`absolute -top-2 text-ember/10 ${isEven ? '-right-2 rotate-180' : '-left-2'}`} />
-                                                <p className="text-white/70 leading-relaxed text-sm whitespace-pre-wrap italic">
-                                                    {memory.text}
-                                                </p>
+                                    {/* Content Card with Cinematic Ledger texture */}
+                                    <div className={`hazy-glass-card relative rounded-[2.5rem] ${layout.cardPadding} ${layout.paperClass} group`}>
+                                        <div className="flex items-center gap-3 mb-5">
+                                            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-ember/80">
+                                                {formatDate(memory.memoryDate || memory.createdAt)}
+                                            </span>
+                                            <span className="h-1 w-1 rounded-full bg-white/20" />
+                                            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] uppercase tracking-wider text-white/60 font-medium">
+                                                <Icon size={10} className="text-ember" />
+                                                {memory.mood}
                                             </div>
                                         </div>
+
+                                        <div className="flex items-start justify-between gap-4">
+                                            <Link href={`/destinations/${memory.destinationSlug}`} className="group/link block flex-1 min-w-0">
+                                                <h3 className="text-xl font-bold text-white group-hover/link:text-ember transition truncate">
+                                                    {memory.title}
+                                                </h3>
+                                                <p className="mt-1 text-sm text-white/40 mb-5 font-medium">
+                                                    at {memory.destinationName}
+                                                </p>
+                                            </Link>
+                                            
+                                            <button 
+                                                onClick={() => deleteMemory(memory.id)}
+                                                className="opacity-0 group-hover:opacity-100 p-2 rounded-full hover:bg-white/10 text-white/40 hover:text-red-500 transition shrink-0"
+                                                title="Delete entry"
+                                            >
+                                                <Trash2 size={16} />
+                                            </button>
+                                        </div>
+
+                                        <div className="relative px-4 py-3 mt-2 border-l-2 border-ember/30 bg-black/20 rounded-r-xl">
+                                            <Quote size={18} className="absolute -top-2.5 -left-2 text-ember/20" />
+                                            <p className="text-white/90 leading-relaxed text-sm whitespace-pre-wrap italic break-words font-normal">
+                                                {memory.text}
+                                            </p>
+                                        </div>
                                     </div>
-                                    
-                                    {/* Spacer for MD screens */}
-                                    <div className="hidden md:block w-[calc(50%-2rem)]" />
                                 </MotionDiv>
                             );
                         })}

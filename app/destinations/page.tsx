@@ -33,8 +33,8 @@ export default async function DestinationsPage({
 
         {selectedCategory && (
           <div className="mb-10 flex items-center">
-            <div className="flex items-center gap-3 rounded-full border border-white/10 bg-white/5 py-1.5 pl-4 pr-2 text-sm font-medium text-white shadow-glass">
-              <span className="text-white/40 font-normal">Filtering:</span>
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3 rounded-full border border-white/10 bg-white/5 py-1.5 pl-4 pr-2 text-sm font-medium text-white shadow-glass min-w-0">
+              <span className="text-white/40 font-normal shrink-0">Filtering:</span>
               <span className="text-ember">{selectedCategory.title}</span>
               <Link
                 href="/destinations"

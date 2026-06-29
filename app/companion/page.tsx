@@ -12,6 +12,9 @@ import {
   ShieldCheck,
   Clock,
 } from "lucide-react";
+import Image from "next/image";
+import { auth } from "@/lib/firebase";
+import { onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
 
 import SectionHeader from "@/components/SectionHeader";
 import { MotionDiv, MotionSection, stagger, fadeUp } from "@/components/Motion";
@@ -51,32 +54,54 @@ const generateId = (): string => {
 
 // --- UI Components ---
 
-const ChatBubble = ({ message }: { message: Message }) => {
+const ChatBubble = ({ message, user }: { message: Message; user: FirebaseUser | null }) => {
   const isAssistant = message.role === "assistant";
+  const userPhotoURL = user?.photoURL;
 
   return (
     <motion.div
       layout
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`flex w-full items-start gap-2 sm:gap-3 ${isAssistant ? "justify-start pl-1 sm:pl-2" : "justify-end pr-1 sm:pr-2"
-        }`}
+      className={`flex w-full items-start gap-2.5 sm:gap-3 ${
+        isAssistant ? "justify-start" : "justify-end"
+      }`}
     >
+      {/* Companion Avatar */}
       {isAssistant && (
-        <div className="flex h-7 w-7 sm:h-8 sm:w-8 shrink-0 items-center justify-center rounded-full bg-white/5 text-white/20 ring-1 ring-white/10 shadow-sm">
-          <Sparkles size={13} className="text-ember sm:size-[14px]" />
+        <div className="relative flex h-7 w-7 sm:h-8 sm:w-8 shrink-0 overflow-hidden rounded-full ring-1 ring-white/20">
+          <Image
+            src="/logo.png"
+            alt="Companion Logo"
+            fill
+            sizes="32px"
+            className="object-cover scale-[1.4]"
+          />
         </div>
       )}
+
+      {/* Message Text Bubble */}
       <div
-        className={`rounded-2xl px-3 py-2.5 sm:px-4 sm:py-3 text-sm transition-all shadow-sm ${isAssistant
-            ? "max-w-[85%] sm:max-w-[75%] border border-white/5 bg-white/[0.01] text-white/70 backdrop-blur-3xl rounded-bl-none"
-            : "max-w-[75%] sm:max-w-[65%] bg-ember text-black font-medium rounded-br-none"
-          }`}
+        className={`rounded-2xl px-3 py-2.5 sm:px-4 sm:py-3 text-sm transition-all shadow-sm ${
+          isAssistant
+            ? "max-w-[78%] sm:max-w-[70%] border border-white/5 bg-white/[0.03] text-white/90 backdrop-blur-3xl rounded-tl-none"
+            : "max-w-[78%] sm:max-w-[70%] bg-ember text-black font-medium rounded-tr-none"
+        }`}
       >
-        <p className="text-xs sm:text-sm leading-relaxed">{message.content}</p>
+        {/* Sender Username Indicator (WhatsApp group style) */}
+        <div 
+          className={`mb-0.5 font-bold text-[9px] uppercase tracking-wider ${
+            isAssistant ? "text-ember" : "text-black/60"
+          }`}
+        >
+          {isAssistant ? "Virtual Nomad" : (user?.displayName || "Explorer")}
+        </div>
+
+        <p className="text-xs sm:text-sm leading-relaxed break-words">{message.content}</p>
         <div
-          className={`mt-1.5 flex items-center gap-1 text-[8px] sm:text-[9px] uppercase tracking-tighter opacity-40 ${isAssistant ? "text-white" : "text-black"
-            }`}
+          className={`mt-1.5 flex items-center gap-1 text-[8px] sm:text-[9px] uppercase tracking-tighter opacity-55 ${
+            isAssistant ? "text-white/60" : "text-black/60"
+          }`}
         >
           <Clock size={8} className="sm:size-[9px]" />
           <span>
@@ -87,6 +112,22 @@ const ChatBubble = ({ message }: { message: Message }) => {
           </span>
         </div>
       </div>
+
+      {/* User Avatar */}
+      {!isAssistant && (
+        userPhotoURL ? (
+          <img
+            src={userPhotoURL}
+            alt="User Profile"
+            className="h-7 w-7 sm:h-8 sm:w-8 shrink-0 rounded-full object-cover ring-1 ring-white/20"
+            referrerPolicy="no-referrer"
+          />
+        ) : (
+          <div className="flex h-7 w-7 sm:h-8 sm:w-8 shrink-0 items-center justify-center rounded-full bg-ember/15 text-ember ring-1 ring-ember/30 shadow-sm">
+            <User size={13} className="sm:size-[14px]" />
+          </div>
+        )
+      )}
     </motion.div>
   );
 };
@@ -96,12 +137,18 @@ const TypingIndicator = () => (
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     exit={{ opacity: 0 }}
-    className="flex items-center gap-2 sm:gap-3"
+    className="flex items-start gap-2.5 sm:gap-3"
   >
-    <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-white/5 ring-1 ring-white/10">
-      <Sparkles size={13} className="text-ember animate-pulse sm:size-[14px]" />
+    <div className="relative flex h-7 w-7 sm:h-8 sm:w-8 shrink-0 overflow-hidden rounded-full ring-1 ring-white/20">
+      <Image
+        src="/logo.png"
+        alt="Companion Typing"
+        fill
+        sizes="32px"
+        className="object-cover scale-[1.4]"
+      />
     </div>
-    <div className="flex gap-1.5 rounded-full border border-white/10 bg-white/[0.02] px-3 py-2 backdrop-blur-3xl">
+    <div className="flex gap-1.5 rounded-full border border-white/10 bg-white/[0.02] px-3.5 py-2.5 backdrop-blur-3xl shadow-sm">
       <span className="h-1.5 w-1.5 rounded-full bg-ember/60 animate-bounce [animation-delay:-0.3s]" />
       <span className="h-1.5 w-1.5 rounded-full bg-ember/60 animate-bounce [animation-delay:-0.15s]" />
       <span className="h-1.5 w-1.5 rounded-full bg-ember/60 animate-bounce" />
@@ -115,8 +162,16 @@ export default function CompanionPage() {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [user, setUser] = useState<FirebaseUser | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsub();
+  }, []);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -289,7 +344,7 @@ export default function CompanionPage() {
                 ) : (
                   <LayoutGroup>
                     {messages.map((message) => (
-                      <ChatBubble key={message.id} message={message} />
+                      <ChatBubble key={message.id} message={message} user={user} />
                     ))}
                   </LayoutGroup>
                 )}
@@ -303,13 +358,13 @@ export default function CompanionPage() {
               <div className="border-t border-white/10 p-4 sm:p-6">
                 <form onSubmit={handleSubmit} className="relative flex items-center gap-2 sm:gap-3">
                   <input
-                    ref={inputRef}
-                    type="text"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    placeholder="Describe your current wavelength..."
-                    disabled={isProcessing}
-                    className="flex-1 rounded-xl sm:rounded-2xl border border-white/10 bg-white/[0.02] px-3 sm:px-5 py-3 sm:py-4 text-xs sm:text-sm text-white placeholder:text-white/30 focus:border-ember/50 focus:outline-none focus:ring-1 focus:ring-ember/20 disabled:opacity-50"
+                     ref={inputRef}
+                     type="text"
+                     value={input}
+                     onChange={(e) => setInput(e.target.value)}
+                     placeholder="Describe your current wavelength..."
+                     disabled={isProcessing}
+                     className="flex-1 rounded-xl sm:rounded-2xl border border-white/10 bg-white/[0.02] px-3 sm:px-5 py-3 sm:py-4 text-xs sm:text-sm text-white placeholder:text-white/30 focus:border-ember/50 focus:outline-none focus:ring-1 focus:ring-ember/20 disabled:opacity-50"
                   />
                   <button
                     type="submit"

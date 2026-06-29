@@ -26,6 +26,22 @@ export function useWeatherAtmosphere(): UseWeatherAtmosphereResult {
   useEffect(() => {
     const hour = new Date().getHours();
 
+    // Check localStorage cache first
+    try {
+      const cached = localStorage.getItem("atlas_weather");
+      if (cached) {
+        const { condition, timestamp } = JSON.parse(cached);
+        // Cache is valid for 30 minutes
+        if (Date.now() - timestamp < 30 * 60 * 1000) {
+          setState(resolveWeatherState(condition, hour));
+          setIsLoaded(true);
+          return;
+        }
+      }
+    } catch (e) {
+      console.warn("Failed to read from localStorage", e);
+    }
+
     async function fetchWeather() {
       try {
         const res = await fetch(
@@ -35,7 +51,19 @@ export function useWeatherAtmosphere(): UseWeatherAtmosphereResult {
         const data = await res.json();
         const code: number = data?.current?.weathercode ?? 0;
         const condition = wmoCodeToCondition(code);
-        setState(resolveWeatherState(condition, hour));
+        const resolvedState = resolveWeatherState(condition, hour);
+        
+        setState(resolvedState);
+
+        // Cache the weather condition
+        try {
+          localStorage.setItem(
+            "atlas_weather",
+            JSON.stringify({ condition, timestamp: Date.now() })
+          );
+        } catch (e) {
+          console.warn("Failed to save to localStorage", e);
+        }
       } catch {
         // Fallback: time-only resolution, no external dependency
         setState(resolveWeatherState("clear", hour));

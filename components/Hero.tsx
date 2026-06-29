@@ -132,7 +132,7 @@ export default function Hero() {
     const randomDest = destinations[Math.floor(Math.random() * destinations.length)];
     // Randomly pick 4 steps or first 4
     const steps = randomDest.itinerary.slice(0, 4);
-    
+
     const subtitles = [
       "Based on tonight's mood",
       "Current Bhubaneswar atmosphere",
@@ -159,7 +159,7 @@ export default function Hero() {
 
   return (
     <section
-      className="relative flex min-h-screen items-center overflow-hidden px-6 pb-16 pt-28"
+      className="relative flex min-h-screen items-center overflow-hidden px-6 pb-20 pt-24 md:pb-24 md:pt-28 lg:pb-28 lg:pt-32"
       aria-label={`Hero — ${isLoaded ? theme.label : "Loading atmosphere"}`}
     >
       {/* ── Background Layers ── */}
@@ -230,43 +230,39 @@ export default function Hero() {
         <div className="absolute inset-x-0 bottom-0 z-[1] h-[35vh] pointer-events-none">
           {/* Deep ink fade that perfectly matches the page background */}
           <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/95 to-transparent" />
-          
+
           {/* Subtle atmospheric depth blur */}
           <div className="absolute inset-x-0 bottom-0 h-full bg-gradient-to-t from-ink to-transparent opacity-80 blur-3xl" />
-          
+
           {/* Soft shadow blending for smooth flow */}
           <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-ink to-transparent opacity-50" />
         </div>
       </div>
 
       {/* ── Hero Content ── */}
-      <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.1fr_.9fr]">
+      <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-10 md:gap-12 lg:grid-cols-[1.1fr_.9fr]">
         <motion.div
           initial={{ opacity: 0, y: 34 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
         >
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/8 px-4 py-2 text-sm text-white/70 backdrop-blur-xl">
-            <Sparkles size={16} className="text-ember" />
-            Odisha escapes, planned for KIIT students
-          </div>
-          <h1 className="text-balance text-5xl font-semibold tracking-tight text-white sm:text-6xl lg:text-7xl">
+          <h1 className="text-balance text-[2.75rem] font-semibold leading-[1.08] tracking-tight text-white sm:text-6xl md:text-[4.25rem] lg:text-[5rem] xl:text-[5.5rem]">
             Explore Odisha beyond the classroom.
           </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-white/65">
+          <p className="mt-5 max-w-xl text-base leading-7 text-white/60 sm:mt-7 sm:text-lg sm:leading-8 md:max-w-2xl">
             A cinematic travel OS for evening walks, café plans, beach resets,
             intercity day trips and overnight escapes from KIIT.
           </p>
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:gap-4">
             <Link
               href="/planner"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-ember px-6 py-3 font-semibold text-black transition hover:bg-amberSoft"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-ember px-7 py-3.5 text-[15px] font-semibold text-black transition hover:bg-amberSoft hover:scale-[1.02] active:scale-[0.98]"
             >
               Start planning <ArrowRight size={18} />
             </Link>
             <Link
               href="/destinations"
-              className="inline-flex items-center justify-center rounded-full border border-white/12 bg-white/6 px-6 py-3 font-semibold text-white backdrop-blur-xl transition hover:bg-white/12"
+              className="inline-flex items-center justify-center rounded-full border border-white/12 bg-white/6 px-7 py-3.5 text-[15px] font-semibold text-white backdrop-blur-xl transition hover:bg-white/12"
             >
               Browse destinations
             </Link>

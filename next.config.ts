@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  distDir: process.env.NODE_ENV === "production" ? ".next_production" : ".next",
   images: {
     remotePatterns: [
       {
@@ -9,7 +10,8 @@ const nextConfig: NextConfig = {
       }
     ]
   },
-  allowedDevOrigins: ["10.5.119.199", "localhost"]
+  allowedDevOrigins: ["10.5.119.199", "localhost"],
+  devIndicators: false
 };
 
 export default nextConfig;
