@@ -8,7 +8,8 @@ const nextConfig: NextConfig = {
         hostname: "images.unsplash.com"
       }
     ]
-  }
+  },
+  allowedDevOrigins: ["10.5.119.199", "localhost"]
 };
 
 export default nextConfig;

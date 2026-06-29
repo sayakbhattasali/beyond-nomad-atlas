@@ -178,9 +178,9 @@ export default function AccountPage() {
 
     if (!user) {
         return (
-            <main className="page-shell px-6">
-                <div className="mx-auto max-w-7xl py-20">
-                    <div className="rounded-[2.5rem] border border-white/10 bg-white/[0.02] p-12 text-center backdrop-blur-3xl md:p-20">
+            <main className="page-shell px-4 sm:px-6">
+                <div className="mx-auto max-w-7xl py-12 sm:py-20">
+                    <div className="rounded-[2.5rem] border border-white/10 bg-white/[0.02] p-8 sm:p-12 text-center backdrop-blur-3xl md:p-20">
                         <div className="mx-auto mb-8 flex h-24 w-24 items-center justify-center rounded-full bg-white/5 text-white/20 ring-1 ring-white/10">
                             <UserIcon size={40} />
                         </div>
@@ -198,7 +198,7 @@ export default function AccountPage() {
     }
 
     return (
-        <main className="page-shell px-6 pb-24 pt-12 md:pt-28">
+        <main className="page-shell px-4 sm:px-6 pb-24 pt-12 md:pt-28">
             <section className="mx-auto max-w-7xl pt-4 md:pt-12">
                 <p className="mb-3 text-xs font-semibold uppercase tracking-[.42em] text-ember md:mb-6 md:text-base">
                     Explorer Desk
@@ -212,10 +212,10 @@ export default function AccountPage() {
                     Manage your saved escapes, comments and future travel memories from one place.
                 </p>
 
-                <div className="mt-10 grid gap-8 lg:grid-cols-[340px_1fr] md:mt-16">
+                <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-[340px_1fr] md:mt-16 w-full">
 
                     {/* LEFT PROFILE CARD */}
-                    <div className="rounded-[2rem] border border-white/10 bg-white/[0.03] p-8 backdrop-blur-2xl self-start">
+                    <div className="w-full rounded-[2rem] border border-white/10 bg-white/[0.03] p-5 sm:p-6 md:p-8 backdrop-blur-2xl self-start">
                         <div className="flex flex-col items-center text-center">
                             <img
                                 src={user.photoURL || "https://placehold.co/120x120"}
@@ -224,7 +224,7 @@ export default function AccountPage() {
                                 referrerPolicy="no-referrer"
                             />
 
-                            <h2 className="mt-5 text-2xl font-semibold text-white">
+                            <h2 className="mt-5 text-2xl font-semibold text-white break-words w-full px-2">
                                 {user.displayName || "Explorer"}
                             </h2>
 
@@ -232,37 +232,37 @@ export default function AccountPage() {
                                 Modern Nomad
                             </p>
 
-                            <div className="mt-8 grid w-full grid-cols-2 gap-3 sm:grid-cols-4">
+                            <div className="mt-8 grid w-full grid-cols-2 gap-2 min-[375px]:gap-3 sm:grid-cols-4">
 
-                                <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition hover:bg-white/5">
-                                    <p className="text-xl font-semibold text-white">{savedCount}</p>
+                                <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-2.5 sm:p-4 transition hover:bg-white/5 min-w-0">
+                                    <p className="text-xl font-semibold text-white truncate">{savedCount}</p>
 
-                                    <p className="mt-1 text-[10px] uppercase tracking-[0.12em] text-white/35 flex items-center justify-center gap-1">
-                                        <Bookmark size={10} className="text-ember" /> Saved
+                                    <p className="mt-1 text-[9px] min-[375px]:text-[10px] uppercase tracking-[0.05em] min-[375px]:tracking-[0.12em] text-white/35 flex items-center justify-center gap-1 flex-wrap">
+                                        <Bookmark size={10} className="text-ember shrink-0" /> <span className="truncate">Saved</span>
                                     </p>
                                 </div>
 
-                                <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition hover:bg-white/5">
-                                    <p className="text-xl font-semibold text-white">{visitedCount}</p>
+                                <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-2.5 sm:p-4 transition hover:bg-white/5 min-w-0">
+                                    <p className="text-xl font-semibold text-white truncate">{visitedCount}</p>
 
-                                    <p className="mt-1 text-[10px] uppercase tracking-[0.12em] text-white/35 flex items-center justify-center gap-1">
-                                        <MapPinCheck size={10} className="text-ember" /> Visited
+                                    <p className="mt-1 text-[9px] min-[375px]:text-[10px] uppercase tracking-[0.05em] min-[375px]:tracking-[0.12em] text-white/35 flex items-center justify-center gap-1 flex-wrap">
+                                        <MapPinCheck size={10} className="text-ember shrink-0" /> <span className="truncate">Visited</span>
                                     </p>
                                 </div>
 
-                                <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition hover:bg-white/5">
-                                    <p className="text-xl font-semibold text-white">{memoryCount}</p>
+                                <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-2.5 sm:p-4 transition hover:bg-white/5 min-w-0">
+                                    <p className="text-xl font-semibold text-white truncate">{memoryCount}</p>
 
-                                    <p className="mt-1 text-[10px] uppercase tracking-[0.12em] text-white/35 flex items-center justify-center gap-1">
-                                        <Book size={10} className="text-ember" /> Journal
+                                    <p className="mt-1 text-[9px] min-[375px]:text-[10px] uppercase tracking-[0.05em] min-[375px]:tracking-[0.12em] text-white/35 flex items-center justify-center gap-1 flex-wrap">
+                                        <Book size={10} className="text-ember shrink-0" /> <span className="truncate">Journal</span>
                                     </p>
                                 </div>
 
-                                <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition hover:bg-white/5">
-                                    <p className="text-xl font-semibold text-white">{commentsCount}</p>
+                                <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-2.5 sm:p-4 transition hover:bg-white/5 min-w-0">
+                                    <p className="text-xl font-semibold text-white truncate">{commentsCount}</p>
 
-                                    <p className="mt-1 text-[10px] uppercase tracking-[0.12em] text-white/35 flex items-center justify-center gap-1">
-                                        <MessageSquare size={10} className="text-ember" /> Notes
+                                    <p className="mt-1 text-[9px] min-[375px]:text-[10px] uppercase tracking-[0.05em] min-[375px]:tracking-[0.12em] text-white/35 flex items-center justify-center gap-1 flex-wrap">
+                                        <MessageSquare size={10} className="text-ember shrink-0" /> <span className="truncate">Notes</span>
                                     </p>
                                 </div>
 
@@ -271,10 +271,10 @@ export default function AccountPage() {
                     </div>
 
                     {/* RIGHT CONTENT */}
-                    <div className="space-y-8">
+                    <div className="space-y-8 min-w-0 w-full">
 
                         {/* SAVED DESTINATIONS */}
-                        <div className="rounded-[2rem] border border-white/10 bg-white/[0.03] p-8 backdrop-blur-2xl">
+                        <div className="rounded-[2rem] border border-white/10 bg-white/[0.03] p-5 sm:p-6 md:p-8 backdrop-blur-2xl">
 
                             <div className="flex items-center justify-between">
                                 <div>
@@ -332,7 +332,7 @@ export default function AccountPage() {
                         </div>
 
                         {/* VISITED PLACES */}
-                        <div className="rounded-[2rem] border border-white/10 bg-white/[0.03] p-8 backdrop-blur-2xl">
+                        <div className="rounded-[2rem] border border-white/10 bg-white/[0.03] p-5 sm:p-6 md:p-8 backdrop-blur-2xl">
 
                             <div className="flex items-center justify-between">
                                 <div>
@@ -390,7 +390,7 @@ export default function AccountPage() {
                         </div>
 
                         {/* TRAVEL MEMORIES */}
-                        <div className="rounded-[2rem] border border-white/10 bg-white/[0.03] p-8 backdrop-blur-2xl">
+                        <div className="rounded-[2rem] border border-white/10 bg-white/[0.03] p-5 sm:p-6 md:p-8 backdrop-blur-2xl">
 
                             <p className="text-xs uppercase tracking-[0.24em] text-ember">
                                 Personal Archive
@@ -407,21 +407,21 @@ export default function AccountPage() {
                                             key={memory.id}
                                             className="rounded-[1.5rem] border border-white/5 bg-white/[0.02] p-6"
                                         >
-                                            <div className="flex items-start justify-between gap-4">
-                                                <div className="flex-1">
-                                                    <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-ember/70">
+                                            <div className="flex items-start justify-between gap-3 sm:gap-4">
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-ember/70 truncate">
                                                         {memory.destinationName} • {memory.mood}
                                                     </p>
-                                                    <h4 className="mt-2 text-lg font-semibold text-white">
+                                                    <h4 className="mt-2 text-lg font-semibold text-white truncate">
                                                         {memory.title}
                                                     </h4>
-                                                    <div className="mt-3 border-l border-ember/20 pl-4 py-1">
+                                                    <div className="mt-3 border-l border-ember/20 pl-3 sm:pl-4 py-1">
                                                         <p className="text-sm leading-6 text-white/60 line-clamp-2 italic">
                                                             {memory.text}
                                                         </p>
                                                     </div>
                                                 </div>
-                                                <p className="text-[10px] text-white/25 whitespace-nowrap pt-1">
+                                                <p className="text-[10px] text-white/25 whitespace-nowrap pt-1 shrink-0">
                                                     {getTimeAgo(memory.memoryDate || memory.createdAt)}
                                                 </p>
                                             </div>
@@ -442,7 +442,7 @@ export default function AccountPage() {
                         </div>
 
                         {/* RECENT DISCUSSIONS */}
-                        <div className="rounded-[2rem] border border-white/10 bg-white/[0.03] p-8 backdrop-blur-2xl">
+                        <div className="rounded-[2rem] border border-white/10 bg-white/[0.03] p-5 sm:p-6 md:p-8 backdrop-blur-2xl">
 
                             <p className="text-xs uppercase tracking-[0.24em] text-ember">
                                 Community Activity
@@ -462,16 +462,16 @@ export default function AccountPage() {
                                                 href={`/destinations/${comment.destinationSlug}`}
                                                 className="group block rounded-[1.5rem] border border-white/5 bg-white/[0.02] p-5 transition hover:bg-white/[0.05] hover:border-white/10"
                                             >
-                                                <div className="flex items-start justify-between gap-4">
-                                                    <div className="flex-1">
-                                                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-ember/70 group-hover:text-ember transition">
+                                                <div className="flex items-start justify-between gap-3 sm:gap-4">
+                                                    <div className="flex-1 min-w-0">
+                                                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-ember/70 group-hover:text-ember transition truncate">
                                                             {destination?.name || "Destination"}
                                                         </p>
                                                         <p className="mt-2 text-sm leading-6 text-white/70 line-clamp-2">
                                                             "{comment.text}"
                                                         </p>
                                                     </div>
-                                                    <p className="text-[10px] text-white/25 whitespace-nowrap pt-0.5">
+                                                    <p className="text-[10px] text-white/25 whitespace-nowrap pt-0.5 shrink-0">
                                                         {getTimeAgo(comment.createdAt)}
                                                     </p>
                                                 </div>
