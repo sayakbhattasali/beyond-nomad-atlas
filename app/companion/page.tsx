@@ -74,7 +74,8 @@ const ChatBubble = ({ message, user }: { message: Message; user: FirebaseUser | 
             src="/logo.png"
             alt="Companion Logo"
             fill
-            sizes="32px"
+            sizes="96px"
+            quality={95}
             className="object-cover scale-[1.4]"
           />
         </div>
@@ -144,7 +145,8 @@ const TypingIndicator = () => (
         src="/logo.png"
         alt="Companion Typing"
         fill
-        sizes="32px"
+        sizes="96px"
+        quality={95}
         className="object-cover scale-[1.4]"
       />
     </div>

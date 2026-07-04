@@ -30,7 +30,8 @@ export default function Navbar() {
               src="/logo.png"
               alt="Beyond Nomad Atlas Logo"
               fill
-              sizes="(max-width: 640px) 32px, 40px"
+              sizes="(max-width: 640px) 96px, 120px"
+              quality={95}
               priority
               className="object-cover scale-[1.4]"
             />

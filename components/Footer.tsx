@@ -12,7 +12,8 @@ export default function Footer() {
                 src="/logo.png"
                 alt="Beyond Nomad Atlas Logo"
                 fill
-                sizes="40px"
+                sizes="120px"
+                quality={95}
                 className="object-cover scale-[1.4]"
               />
             </span>
